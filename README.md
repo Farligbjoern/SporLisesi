@@ -1,6 +1,7 @@
 # Spor Salonu Yönetim Sistemi
 
 Bu proje, bir spor salonu veya benzeri bir tesisin yönetimini kolaylaştırmak amacıyla geliştirilmiş bir web uygulamasıdır. Kullanıcılar; öğrenci ve personel kayıtları, yoklama takibi, ödeme işlemleri, duyuru yönetimi ve tesis/seans düzenlemeleri gibi işlemleri kolayca gerçekleştirebilir.
+***Proje halen geliştirme aşamasındadır.***
 
 ## Özellikler
 - Öğrenci ve personel yönetimi
