@@ -5,7 +5,7 @@ Bu proje, bir spor salonu veya benzeri bir tesisin yönetimini kolaylaştırmak 
 ## Özellikler
 - Öğrenci ve personel yönetimi
 - Yoklama (attendance) takibi
-- Ödeme işlemleri
+- Ödeme işlemleri (Sadece tutanak şeklinde)
 - Duyuru ekleme ve görüntüleme
 - Tesis ve seans yönetimi
 - Kullanıcı dostu arayüz
@@ -21,11 +21,11 @@ Bu proje, bir spor salonu veya benzeri bir tesisin yönetimini kolaylaştırmak 
    ```bash
    npm install
    ```
-2. Veritabanı ayarlarını `config/database.js` dosyasından yapın.
+2. Veritabanı ayarlarını `config/database.js` dosyasından yapın. (Veritabanı için sql.sql dosyasına bakabilirsiniz.)
 3. Sunucuyu başlatın:
    ```bash
    node server.js
    ```
 
 ## Katkı
-Katkıda bulunmak isterseniz, lütfen bir pull request gönderin veya issue açın.
+Katkıda bulunmak isterseniz Discord adresim @Noxinya iletişim kurabilirsiniz.
