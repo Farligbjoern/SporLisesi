@@ -17,10 +17,7 @@ Bu proje, bir spor salonu veya benzeri bir tesisin yönetimini kolaylaştırmak 
 - HTML, CSS, JavaScript
 
 ## Kurulum
-1. Gerekli bağımlılıkları yükleyin:
-   ```bash
-   npm install
-   ```
+1. Gerekli modülleri yükleyin.
 2. Veritabanı ayarlarını `config/database.js` dosyasından yapın. (Veritabanı için sql.sql dosyasına bakabilirsiniz.)
 3. Sunucuyu başlatın:
    ```bash
