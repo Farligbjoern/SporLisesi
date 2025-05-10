@@ -1,0 +1,36 @@
+{
+  "name": "erkuthocaodev",
+  "version": "0.1.2",
+  "description": "Erkut hoca ödevi",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "keywords": [
+    "Erkut",
+    "Erkut",
+    "hoca",
+    "Spor",
+    "Ödev",
+    "Aidat",
+    "Deniz",
+    "Çağan"
+  ],
+  "author": "Deniz Çağan Urkan",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "express-slow-down": "^2.0.3",
+    "helmet": "^8.1.0",
+    "md5": "^2.3.0",
+    "mongoose": "^8.12.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.13.0",
+    "rate-limiter-flexible": "^7.0.0",
+    "redis": "^4.7.0"
+  }
+}

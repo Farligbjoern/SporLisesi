@@ -1,0 +1,90 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content">
+                        <div class="cards">
+                            <div class="card">
+                                <h1>Personel Yoklama Geçmişi</h1>
+                                <p>Son 100 yoklama kaydı gösterilmektedir.</p>
+                                <div style="margin-bottom: 20px;">
+                                    <a href="/personel-yoklama" class="btn btn-primary">Yeni Yoklama Al</a>
+                                </div>
+                                <table>
+                                    <tr>
+                                        <th>Tarih</th>
+                                        <th>Personel</th>
+                                        <th>Departman</th>
+                                        <th>Durum</th>
+                                        <th>Yoklamayı Alan</th>
+                                    </tr>
+                                    <% yoklamalar.forEach(function(yoklama) { %>
+                                        <tr>
+                                            <td>
+                                                <%= new Date(yoklama.tarih).toLocaleDateString('tr-TR') %>
+                                            </td>
+                                            <td>
+                                                <%= yoklama.personel_isim %>
+                                                    <%= yoklama.personel_soyisim %>
+                                            </td>
+                                            <td class="buyuk">
+                                                <%= yoklama.departman %>
+                                            </td>
+                                            <td>
+                                                <span class="durum-badge <%= yoklama.durum %>">
+                                                    <%= yoklama.durum.toUpperCase() %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <%= yoklama.yonetici_isim %>
+                                                    <%= yoklama.yonetici_soyisim %>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <style>
+                .durum-badge {
+                    padding: 6px 12px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+
+                .durum-badge.geldi {
+                    background-color: #e8f5e9;
+                    color: #2e7d32;
+                }
+
+                .durum-badge.gelmedi {
+                    background-color: #ffebee;
+                    color: #c62828;
+                }
+
+                .durum-badge.izinli {
+                    background-color: #e3f2fd;
+                    color: #1565c0;
+                }
+
+                .durum-badge.raporlu {
+                    background-color: #fff3e0;
+                    color: #ef6c00;
+                }
+            </style>
+
+            <script>
+                document.querySelectorAll('.buyuk').forEach(element => {
+                    element.innerHTML = element.innerHTML.toUpperCase();
+                });
+            </script>
+
+            <%- include("../parts/footer.ejs") %>

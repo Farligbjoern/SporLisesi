@@ -1,0 +1,131 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        <span id="site-name"></span>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="sidebar-item-group">
+            <a href="/" class="sidebar-item">
+                <div class="item-content">
+                    <i class="fas fa-home"></i>
+                    <span>Anasayfa</span>
+                </div>
+            </a>
+            <a href="/duyurular" class="sidebar-item">
+                <div class="item-content">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Duyurular</span>
+                </div>
+            </a>
+            <div class="sidebar-item dropdown-trigger" data-target="uye-menu">
+                <div class="item-content">
+                    <i class="fas fa-users"></i>
+                    <span>Üye İşlemleri</span>
+                </div>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="sidebar-dropdown" id="uye-menu">
+                <a href="/ogrenci/all" class="sidebar-dropdown-item">
+                    <i class="fas fa-address-card"></i>
+                    <span>Öğrenci Listesi</span>
+                </a>
+                <a href="/yoklama" class="sidebar-dropdown-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Yoklama</span>
+                </a>
+                <% if(data.yetki>= 2) { %>
+                    <a href="/ogrenci/pay" class="sidebar-dropdown-item">
+                        <i class="fas fa-receipt"></i>
+                        <span>Aidat Ödemeleri</span>
+                    </a>
+                    <a href="/ogrenci/kayit" class="sidebar-dropdown-item">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Yeni Üye Kaydı</span>
+                    </a>
+                    <% } %>
+            </div>
+        </div>
+
+        <% if(data.yetki>= 2) { %>
+            <div class="sidebar-item-group">
+                <div class="sidebar-item dropdown-trigger" data-target="personel-menu">
+                    <div class="item-content">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Personel Yönetimi</span>
+                    </div>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="sidebar-dropdown" id="personel-menu">
+                    <a href="/personel/all" class="sidebar-dropdown-item">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Personel Listesi</span>
+                    </a>
+                    <a href="/personel/pay" class="sidebar-dropdown-item">
+                        <i class="fas fa-receipt"></i>
+                        <span>Personel Maaş Takibi</span>
+                    </a>
+                    <a href="/personel-yoklama" class="sidebar-dropdown-item">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Personel Yoklaması</span>
+                    </a>
+                    <% if(data.yetki>= 2) { %>
+                        <a href="/personel/kayit" class="sidebar-dropdown-item">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Yeni Personel Kaydı</span>
+                        </a>
+                        <% } %>
+                </div>
+            </div>
+            <% } %>
+
+                <% if(data.yetki>= 2) { %>
+                    <div class="sidebar-item-group">
+                        <div class="sidebar-item dropdown-trigger" data-target="yonetim-menu">
+                            <div class="item-content">
+                                <i class="fas fa-cogs"></i>
+                                <span>Yönetim</span>
+                            </div>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="sidebar-dropdown" id="yonetim-menu">
+                            <a href="/spor-dallari" class="sidebar-dropdown-item">
+                                <i class="fas fa-running"></i>
+                                <span>Spor Dalları</span>
+                            </a>
+                            <a href="/is-dallari" class="sidebar-dropdown-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span>İş Dalları</span>
+                            </a>
+                            <a href="/tesisler" class="sidebar-dropdown-item">
+                                <i class="fas fa-building"></i>
+                                <span>Tesisler</span>
+                            </a>
+                            <a href="/seanslar" class="sidebar-dropdown-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Seanslar</span>
+                            </a>
+
+                            <a href="/ozel-dersler" class="sidebar-dropdown-item">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <span>Özel Dersler</span>
+                            </a>
+                        </div>
+                    </div>
+                    <% } %>
+
+                        <% if(data.yetki>= 2) { %>
+                            <a href="/a/settings" class="sidebar-item">
+                                <div class="item-content">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Ayarlar</span>
+                                </div>
+                            </a>
+                            <% } %>
+
+                                <a href="/logout" class="sidebar-item">
+                                    <div class="item-content" style="color: red;">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Çıkış Yap</span>
+                                    </div>
+                                </a>
+    </nav>
+</div>

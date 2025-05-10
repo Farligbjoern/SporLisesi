@@ -1,0 +1,97 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content ogrenci_kayit_div">
+                        <div class="card">
+                            <h1>Personel Kayıt Formu</h1>
+                            <p>* ile işaretli alanların doldurulması zorunludur.</p>
+                            <br>
+                            <form class="kayit-form" action="/personel/kayit" method="POST">
+                                <div class="form-group-container">
+                                    <div class="form-section">
+                                        <h2>Personel Bilgileri</h2>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="tc">TC Kimlik No *</label>
+                                                <input type="text" id="tc" name="tc" required pattern="[0-9]{11}"
+                                                    maxlength="11" placeholder="12345678901">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="yetki" value="1">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="isim">İsim *</label>
+                                                <input type="text" id="isim" name="isim" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="soyisim">Soyisim *</label>
+                                                <input type="text" id="soyisim" name="soyisim" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="cinsiyet">Cinsiyet *</label>
+                                                <select id="cinsiyet" name="cinsiyet" required>
+                                                    <option value="">Seçiniz</option>
+                                                    <option value="E">Erkek</option>
+                                                    <option value="K">Kadın</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="dogum_tarihi">Doğum Tarihi *</label>
+                                                <input type="date" id="dogum_tarihi" name="dogum_tarihi" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="telno">Telefon Numarası *</label>
+                                                <input type="tel" id="telno" name="telno" required pattern="[0-9]{10}"
+                                                    maxlength="10" placeholder="5321234567">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="mail">Mail Adresi *</label>
+                                                <input type="email" id="mail" name="mail" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="departman">Departman *</label>
+                                                <input type="text" id="departman" name="departman" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="izin_durumu">İzin Durumu</label>
+                                                <input type="date" id="izin_durumu" name="izin_durumu"
+                                                    value="0001-01-01">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-buttons">
+                                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                                    <button type="button" id="temizlerrr" class="btn btn-secondary">Temizle</button>
+                                    <script>
+                                        document.getElementById("temizlerrr").addEventListener("click", function () {
+                                            document.getElementById("tc").value = "";
+                                            document.getElementById("isim").value = "";
+                                            document.getElementById("soyisim").value = "";
+                                            document.getElementById("cinsiyet").value = "";
+                                            document.getElementById("dogum_tarihi").value = "";
+                                            document.getElementById("telno").value = "";
+                                            document.getElementById("mail").value = "";
+                                            document.getElementById("departman").value = "";
+                                            document.getElementById("izin_durumu").value = "0001-01-01";
+                                        });
+                                    </script>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </section>
+
+            <%- include("../parts/footer.ejs") %>

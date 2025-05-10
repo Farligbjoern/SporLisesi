@@ -1,0 +1,106 @@
+<%- include("../parts/header.ejs") %>
+    <section class="main-container" style="margin-top: -70px;">
+        <%- include("../parts/sidebar.ejs") %>
+            <div class="content">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1><i class="fas fa-plus-circle"></i> Yeni Duyuru Ekle</h1>
+                        </div>
+                        <form action="/duyuru_ekle" method="POST" class="duyuru-form">
+                            <div class="form-group">
+                                <label for="announcement">Duyuru Metni</label>
+                                <textarea id="announcement" name="announcement" rows="6" required
+                                    placeholder="Duyuru metnini buraya yazın..."></textarea>
+                            </div>
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Duyuruyu Yayınla
+                                </button>
+                                <a href="/duyurular" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> İptal
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <style>
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .duyuru-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 150px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            border-color: #1976D2;
+            outline: none;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #1976D2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1565C0;
+        }
+
+        .btn-secondary {
+            background: #757575;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #616161;
+        }
+    </style>
+
+    <%- include("../parts/footer.ejs") %>

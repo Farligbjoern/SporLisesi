@@ -1,0 +1,80 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content">
+                        <div class="cards">
+                            <div class="card">
+                                <h1>Personel Yoklaması</h1>
+                                <p>Bugünün Tarihi: <%= new Date().toLocaleDateString('tr-TR') %>
+                                </p>
+                                <br>
+                                <form action="/personel-yoklama" method="POST">
+                                    <table>
+                                        <tr>
+                                            <th>Personel Adı</th>
+                                            <th>Personel Soyadı</th>
+                                            <th>Departman</th>
+                                            <th>Durum</th>
+                                        </tr>
+                                        <% personeller.forEach(function(personel) { const yoklama=yoklamalar.find(y=>
+                                            y.personel_id === personel.id);
+                                            %>
+                                            <tr>
+                                                <td>
+                                                    <%= personel.isim %>
+                                                </td>
+                                                <td>
+                                                    <%= personel.soyisim %>
+                                                </td>
+                                                <td class="buyuk">
+                                                    <%= personel.departman %>
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="personel_ids[]"
+                                                        value="<%= personel.id %>">
+                                                    <select name="durum[]" required class="modern-select"
+                                                        onchange="this.classList.remove('status-geldi', 'status-gelmedi', 'status-izinli', 'status-raporlu'); this.classList.add('status-' + this.value)">
+                                                        <option value="geldi" <%=yoklama && yoklama.durum==='geldi'
+                                                            ? 'selected' : '' %>>Geldi</option>
+                                                        <option value="gelmedi" <%=yoklama && yoklama.durum==='gelmedi'
+                                                            ? 'selected' : '' %>>Gelmedi</option>
+                                                        <option value="izinli" <%=yoklama && yoklama.durum==='izinli'
+                                                            ? 'selected' : '' %>>İzinli</option>
+                                                        <option value="raporlu" <%=yoklama && yoklama.durum==='raporlu'
+                                                            ? 'selected' : '' %>>Raporlu</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </table>
+                                    <br>
+                                    <div class="form-buttons">
+                                        <button type="submit" class="btn btn-primary">Yoklamayı Kaydet</button>
+                                        <a href="/personel-yoklama/gecmis" class="btn"
+                                            style="background-color: #1976D2;">Yoklama Geçmişi</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <script>
+                document.querySelectorAll('.buyuk').forEach(element => {
+                    element.innerHTML = element.innerHTML.toUpperCase();
+                });
+
+                // Sayfa yüklendiğinde select elementlerinin rengini ayarla
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.modern-select').forEach(select => {
+                        select.classList.add('status-' + select.value);
+                    });
+                });
+            </script>
+
+            <%- include("../parts/footer.ejs") %>

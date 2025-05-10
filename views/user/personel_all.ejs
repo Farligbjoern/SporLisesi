@@ -1,0 +1,55 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;"> <%- include("../parts/sidebar.ejs") %>
+                    <div class="content">
+                        <div class="cards">
+                            <div class="card">
+                                <h1>Tüm <span style="color: #1976D2;">Personeller</span></h1>
+                                <table>
+                                    <tr>
+                                        <th>Personel Adı</th>
+                                        <th>Personel Soyadı</th>
+                                        <th>İzin Durumu</th>
+                                        <th>Spor Dalı</th>
+                                        <th>İşlem</th>
+                                    </tr>
+                                    <% personeller.forEach(personel=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= personel.isim %>
+                                            </td>
+                                            <td>
+                                                <%= personel.soyisim %>
+                                            </td>
+                                            <td>
+                                                <span class="izin-durumu"
+                                                    data-tarih="<%= personel.izin_durumu %>"></span>
+                                            </td>
+                                            <td class="buyuk">
+                                                <%= personel.departman %>
+                                            </td>
+                                            <td><a href="/personel/view/<%= personel.id %>" class="btn">Personele
+                                                    git</a>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </table>
+                                <br>
+                                <a href="/personel/kayit" class="btn" style="background-color: lightgreen;">Yeni
+                                    Personel
+                                    Kaydı</a>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <script>
+                document.querySelectorAll('.buyuk').forEach(element => {
+                    element.innerHTML = element.innerHTML.toUpperCase();
+                });
+            </script>
+            <%- include("../parts/footer.ejs") %>

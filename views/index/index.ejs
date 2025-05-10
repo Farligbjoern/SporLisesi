@@ -1,0 +1,125 @@
+<%- include("../parts/header.ejs") %>
+
+    <section class="main-container" style="margin-top: -70px;">
+        <%- include("../parts/sidebar.ejs") %>
+            <div class="content">
+                <div class="cards">
+                    <div class="card">
+                        <h1>Sayın <strong style="color: #1976D2;">
+                                <%= data.isim %>
+                            </strong>, hoşgeldiniz.</h1>
+                        <p>Yönetim paneline hoşgeldiniz. </p>
+                    </div>
+                    <div class="card">
+                        <h1><strong style="color: #1976D2;">Duyurular</strong></h1>
+
+                        <% if(duyuru) { %>
+                            <div style="border: 1px solid #eee; padding: 15px; margin: 15px 0; border-radius: 5px;">
+                                <h3 style="margin-top: 0; color: #333;">
+                                    <%= duyuru.announcement %>
+                                </h3>
+                                <div style="display: flex; justify-content: space-between; color: #666;">
+                                    <div>
+                                        <%= new Date(duyuru.date).toLocaleString('tr-TR', { day: '2-digit' ,
+                                            month: 'long' , year: 'numeric' , hour: '2-digit' , minute: '2-digit' }) %>
+                                    </div>
+                                    <div>
+                                        <%= duyuru.ad %>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } else { %>
+                                <div style="padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+                                    Henüz duyuru bulunmamaktadır
+                                </div>
+                                <% } %>
+                                    <br>
+                                    <a href="/duyurular" class="btn">Tüm duyuruları görüntüle</a>
+                    </div>
+                    <div class="card">
+                        <h1>Üye bilgileri</h1>
+                        <p>Sadece son <strong>4</strong> adet üye gözükmektedir. Tüm üyeleri görmek için <strong>Tüm
+                                üyeleri görüntüle</strong> butona basınız.*</p>
+                        <table>
+                            <tr>
+                                <th>İsim</th>
+                                <th>Soyisim</th>
+                                <th>Veli Adı Soyadı</th>
+                                <th>Sakatlık Durumu</th>
+                                <th>İşlem</th>
+                            </tr>
+                            <% ogrenciler.forEach(ogrenci=> { %>
+                                <tr>
+                                    <td>
+                                        <%= ogrenci.isim %>
+                                    </td>
+                                    <td>
+                                        <%= ogrenci.soyisim %>
+                                    </td>
+                                    <td>
+                                        <%= ogrenci.veli_isim %>
+                                            <%= ogrenci.veli_soyisim %>
+                                    </td>
+                                    <td>
+                                        <span class="sakatlik-durumu"
+                                            data-tarih="<%= ogrenci.sakatlık_tarihi %>"></span>
+                                    </td>
+                                    <td><a href="/ogrenci/view/<%= ogrenci.id %>" class="btn">Üyeye git</a></td>
+                                </tr>
+                                <% }); %>
+                        </table>
+                        <br>
+                        <a href="/ogrenci/all" class="btn">Tüm üyeleri görüntüle</a>
+                        <a href="/ogrenci/kayit" class="btn" style="background-color: lightgreen;">Yeni Üye Kaydı</a>
+                    </div>
+
+                    <%if(data.yetki==2) {%>
+                        <div class="card">
+                            <h1>Personel bilgileri</h1>
+                            <p>Sadece son <strong>4</strong> adet personel gözükmektedir. Tüm personelleri görmek için
+                                <strong>Tüm personelleri görüntüle</strong> butona basınız.*
+                            </p>
+                            <table>
+                                <tr>
+                                    <th>Personel Adı</th>
+                                    <th>Personel Soyadı</th>
+                                    <th>Personel İzinde mi?</th>
+                                    <th>Departman Dalı</th>
+                                    <th>Personele Git</th>
+                                </tr>
+                                <% personeller.forEach(personel=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= personel.isim %>
+                                        </td>
+                                        <td>
+                                            <%= personel.soyisim %>
+                                        </td>
+                                        <td>
+
+                                            <span class="izin-durumu" data-tarih="<%= personel.izin_durumu %>"></span>
+                                        </td>
+                                        <td>
+                                            <%= personel.departman %>
+                                        </td>
+                                        <td><a href="/personel/view/<%= personel.id %>" class="btn">Personele git</a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </table>
+                            <br>
+                            <a href="/personel/all" class="btn">Tüm personelleri görüntüle</a>
+                            <a href="/personel/kayit" class="btn" style="background-color: lightgreen;">Yeni Personel
+                                Kaydı</a>
+                        </div>
+                        <%}%>
+                </div>
+                <script>
+                </script>
+            </div>
+    </section>
+
+    <script>
+        document.querySelector('.buyuk').innerHTML = document.querySelector('.buyuk').innerHTML.toUpperCase();
+    </script>
+    <%- include("../parts/footer.ejs") %>

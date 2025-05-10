@@ -1,0 +1,116 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content ogrenci_kayit_div">
+                        <div class="card">
+                            <h1>Personel Maaş Ödemesi</h1>
+                            <p>Maaş ödemesi yapmak için formu doldurunuz.</p>
+                            <label for="" style="color: red;">Not: Personel maaş ödemesi için açıklamaya
+                                <strong>maaş</strong> yazılmalıdır.</label>
+                            <br>
+                            <form action="/personel/pay" method="POST" class="kayit-form">
+                                <div class="form-group-container">
+                                    <div class="form-section">
+                                        <h2>Ödeme Bilgileri</h2>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="odenen_id">Personel Seçin</label>
+                                                <select name="odenen_id" id="odenen_id" required>
+                                                    <% personeller.forEach(function(personel) { %>
+                                                        <option value="<%= personel.id %>">
+                                                            <%= personel.isim %>
+                                                                <%= personel.soyisim %> -
+                                                                    <%= personel.personel_maas %>
+                                                                        <%= personel.personel_maas_doviz %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="odeme_miktari">Ödeme Miktarı</label>
+                                                <input type="number" id="odeme_miktari" name="odeme_miktari" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="odeme_sekli">Ödeme Şekli</label>
+                                                <select name="odeme_sekli" id="odeme_sekli" required>
+                                                    <option value="nakit">Nakit</option>
+                                                    <option value="havale">Havale</option>
+                                                    <option value="eft">EFT</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="odeme_aciklama">Açıklama</label>
+                                                <textarea name="odeme_aciklama" id="odeme_aciklama" rows="3"
+                                                    class="form-control"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-buttons">
+                                            <button type="submit" class="btn btn-primary">Ödemeyi Kaydet</button>
+                                            <button type="reset" class="btn btn-secondary">Formu Temizle</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="cards">
+                            <div class="card">
+                                <h1>Son Ödemeler</h1>
+                                <p>Son 10 ödeme işlemi listelenmektedir.</p>
+                                <table>
+                                    <tr>
+                                        <th>Ödeyen Personel</th>
+                                        <th>Ödenen Personel</th>
+                                        <th>Ödeme Tarihi</th>
+                                        <th>Miktar</th>
+                                        <th>Ödeme Şekli</th>
+                                        <th>Açıklama</th>
+                                    </tr>
+                                    <% odemeler.forEach(function(odeme) { %>
+                                        <tr>
+                                            <td>
+                                                <%= odeme.odeyen_isim %>
+                                                    <%= odeme.odeyen_soyisim %>
+                                            </td>
+                                            <td>
+                                                <%= odeme.odenen_isim %>
+                                                    <%= odeme.odenen_soyisim %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(odeme.odenen_tarih).toLocaleDateString('tr-TR') %>
+                                            </td>
+                                            <td>
+                                                <%= odeme.odeme_miktari %> TL
+                                            </td>
+                                            <td class="buyuk">
+                                                <%= odeme.odeme_sekli %>
+                                            </td>
+                                            <td>
+                                                <%= odeme.odeme_aciklama %>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </table>
+                                <br>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.querySelectorAll('.buyuk').forEach(element => {
+                                element.innerHTML = element.innerHTML.toUpperCase();
+                            });
+                        </script>
+                    </div>
+            </section>
+
+            <%- include("../parts/footer.ejs") %>

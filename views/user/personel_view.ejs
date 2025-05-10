@@ -1,0 +1,347 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content ogrenci_kayit_div">
+                        <div class="card">
+                            <h1>Personel bilgi formu</h1>
+                            <p>Değişiklik yaparsanız yaptığınız değişiklikleri kaydetmek için kaydet butonuna
+                                basınız.</p>
+                            <br>
+                            <form action="/personel/view/<%= personel.id %>" method="POST" class="kayit-form">
+                                <div class="form-group-container">
+                                    <div class="form-section">
+                                        <h2>Personel bilgileri</h2>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="personel_tc">Personel TC</label>
+                                                <input type="text" id="personel_tc" name="personel_tc"
+                                                    value="<%= personelTc %>" pattern="[0-9]{11}" maxlength="11"
+                                                    placeholder="12345678901" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="personel_isim">Personel İsim</label>
+                                                <input type="text" id="personel_isim" name="personel_isim"
+                                                    value="<%= personel.isim %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="personel_soyisim">Personel Soyisim</label>
+                                                <input type="text" id="personel_soyisim" name="personel_soyisim"
+                                                    value="<%= personel.soyisim %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="personel_cinsiyet">Personel Cinsiyet</label>
+                                                <select id="personel_cinsiyet" name="personel_cinsiyet" required>
+                                                    <option value="E" <% if(personel.cinsiyet=="E" ) { %> selected <% }
+                                                            %>>Erkek</option>
+                                                    <option value="K" <% if(personel.cinsiyet=="K" ) { %> selected <% }
+                                                            %>>Kadın</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="personel_dogum_tarihi">Personel Doğum Tarihi</label>
+                                                <input type="date" id="personel_dogum_tarihi"
+                                                    name="personel_dogum_tarihi"
+                                                    value="<%= typeof formatDate === 'function' ? formatDate(personel.dogum_tarihi) : new Date().toISOString().split('T')[0] %>"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="personel_mail">Personel Mail Adresi</label>
+                                                <input type="email" id="personel_mail" name="personel_mail"
+                                                    value="<%= personel.mail %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="personel_telno">Personel Telefon Numarası</label>
+                                                <input type="tel" id="personel_telno" name="personel_telno"
+                                                    value="<%= personel.telno %>" pattern="[0-9]{10}" maxlength="10"
+                                                    placeholder="5321234567" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="personel_departman">Personel Departmanı</label>
+                                                <input type="text" id="personel_departman" name="personel_departman"
+                                                    value="<%= personel.departman %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="personel_maas">Personel Maaşı</label>
+                                                <input type="number" id="personel_maas" name="personel_maas"
+                                                    value="<%= personel.personel_maas %>" required>
+                                                <select name="personel_maas_doviz" id="" required>
+                                                    <option value="TL" <% if(personel.personel_maas_doviz=="TL" ) { %>
+                                                        selected
+                                                        <% } %>>TL
+                                                    </option>
+                                                    <option value="EURO" <% if(personel.personel_maas_doviz=="EURO" ) {
+                                                        %>
+                                                        selected <% } %>>
+                                                            EURO</option>
+                                                    <option value="STERLİN" <%
+                                                        if(personel.personel_maas_doviz=="STERLİN" ) { %>
+                                                        selected
+                                                        <% } %>>STERLİN
+                                                    </option>
+                                                    <option value="CSD" <% if(personel.personel_maas_doviz=="CSD" ) { %>
+                                                        selected <% } %>>
+                                                            CSD</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="personel_izin">İzin Durumu</label>
+                                                <span class="izin-durumu"
+                                                    data-tarih="<%= personel.izin_durumu %>"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>İzin durumunu güncellemek için tarihi seçiniz:</label>
+                                                <input type="date" id="personel_izin" name="personel_izin" value="<%= typeof formatDate === 'function' ? 
+                                        formatDate(personel.izin_durumu) : 
+                                        new Date().toISOString().split('T')[0] %>" required>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <% if(maas=="yok" ) { %>
+                                                <div class="form-group">
+                                                    <label for="personel_son_maas" style="color: red;">
+                                                        Son ödenenen maaş maalesef bulunamadı.
+                                                        <a href="/personel/pay">Personel Maaş Takibi</a>
+                                                        sayfasından ödemeleri takip edebilirsiniz.
+                                                    </label>
+                                                </div>
+                                                <% }; %>
+                                        </div>
+                                        <h2>Maaş && Yoklama Durumu</h2>
+                                        <div class="form-row" style="margin-top: -15px;">
+                                            <div class="form-group">
+                                                <div class="maas-status">
+                                                    <% let lastPayment=maas !=="yok" ? maas[0] : null; let today=new
+                                                        Date(); let lastPaymentDate=lastPayment ? new
+                                                        Date(lastPayment.odenen_tarih) : null; let
+                                                        daysDiff=lastPaymentDate ? Math.ceil((today - lastPaymentDate) /
+                                                        (1000 * 60 * 60 * 24)) : 31; %>
+
+                                                        <% if (daysDiff <=30) { %>
+                                                            <div class="last-payment">
+                                                                <strong style="color: green;">Bu Ayın Maaşı Ödendi
+                                                                </strong><br>
+                                                                <small>Son Ödeme: <%= lastPayment.odeme_miktari %> TL
+                                                                        (<%= lastPaymentDate.toLocaleDateString('tr-TR')
+                                                                            %>
+                                                                            )</small>
+                                                            </div>
+                                                            <% } else { %>
+                                                                <div class="last-payment">
+                                                                    <strong style="color: red;">Bu Ayın Maaşı Ödenmedi
+                                                                    </strong><br><br>
+                                                                    <a href="/personel/pay"
+                                                                        class="btn btn-primary btn-sm">Maaş
+                                                                        Ödemesi Yap</a>
+                                                                </div>
+                                                                <% } %>
+                                                                    <% if (maas !=="yok" ) { %>
+                                                                        <button type="button"
+                                                                            class="btn btn-info btn-sm"
+                                                                            onclick="openMaasModal()">
+                                                                            Maaş Geçmişini Görüntüle (<%= maas.length %>
+                                                                                ödeme)
+                                                                        </button>
+                                                                        <% } %>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Yoklama Durumu</label>
+                                                <div class="yoklama-status">
+                                                    <button type="button" class="btn btn-info btn-sm"
+                                                        onclick="openYoklamaModal()">
+                                                        Yoklama Geçmişini Görüntüle
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-buttons">
+                                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                                            <button type="button" id="temizlerrr" class="btn btn-secondary">
+                                                Temizle (İlk haline döndür)
+                                            </button>
+                                            <script>
+                                                document.getElementById("temizlerrr").addEventListener("click", function () {
+                                                    document.getElementById("personel_tc").value = "<%= personelTc %>";
+                                                    document.getElementById("personel_isim").value = "<%= personel.isim %>";
+                                                    document.getElementById("personel_soyisim").value = "<%= personel.soyisim %>";
+                                                    document.getElementById("personel_cinsiyet").value = "<%= personel.cinsiyet %>";
+                                                    document.getElementById("personel_dogum_tarihi").value = "<%= formatDate(personel.dogum_tarihi) %>";
+                                                    document.getElementById("personel_telno").value = "<%= personel.telno %>";
+                                                    document.getElementById("personel_mail").value = "<%= personel.mail %>";
+                                                    document.getElementById("personel_departman").value = "<%= personel.departman %>";
+                                                    document.getElementById("personel_maas").value = "<%= personel.personel_maas %>";
+                                                    document.getElementById("personel_izin").value = "<%= formatDate(personel.izin_durumu) %>";
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </section>
+
+            <!-- Maaş Geçmişi Modal -->
+            <div id="maasModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Maaş Geçmişi - <%= personel.isim %>
+                                <%= personel.soyisim %>
+                        </h2>
+                        <span class="close" onclick="closeMaasModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="cards">
+                            <div class="card">
+                                <% if(maas !=="yok" ) { %>
+                                    <table>
+                                        <tr>
+                                            <th>Ödeme Tarihi</th>
+                                            <th>Miktar</th>
+                                            <th>Ödeme Şekli</th>
+                                            <th>Açıklama</th>
+                                            <th>Ödeyen</th>
+                                        </tr>
+                                        <% maas.forEach(function(odeme) { %>
+                                            <tr>
+                                                <td>
+                                                    <%= new Date(odeme.odenen_tarih).toLocaleDateString('tr-TR') %>
+                                                </td>
+                                                <td>
+                                                    <%= odeme.odeme_miktari %> TL
+                                                </td>
+                                                <td class="buyuk">
+                                                    <%= odeme.odeme_sekli %>
+                                                </td>
+                                                <td>
+                                                    <%= odeme.odeme_aciklama %>
+                                                </td>
+                                                <td>
+                                                    <%= odeme.odeyen_isim %>
+                                                        <%= odeme.odeyen_soyisim %>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </table>
+                                    <% } else { %>
+                                        <p>Maaş ödemesi bulunamadı.</p>
+                                        <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yoklama Geçmişi Modal -->
+            <div id="yoklamaModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Yoklama Geçmişi - <%= personel.isim %>
+                                <%= personel.soyisim %>
+                        </h2>
+                        <span class="close" onclick="closeYoklamaModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="cards">
+                            <div class="card">
+                                <table>
+                                    <tr>
+                                        <th>Tarih</th>
+                                        <th>Durum</th>
+                                        <th>Yoklamayı Alan</th>
+                                    </tr>
+                                    <% if (typeof yoklamalar !=='undefined' && yoklamalar.length> 0) { %>
+                                        <% const filteredYoklamalar=yoklamalar.filter(yoklama=> yoklama.durum !==
+                                            'geldi'); %>
+                                            <% if (filteredYoklamalar.length> 0) { %>
+                                                <% filteredYoklamalar.forEach(function(yoklama) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= new Date(yoklama.tarih).toLocaleDateString('tr-TR') %>
+                                                        </td>
+                                                        <td
+                                                            class="buyuk <%= yoklama.durum === 'gelmedi' ? 'kirmizi' : '' %>">
+                                                            <%= yoklama.durum %>
+                                                        </td>
+                                                        <td>
+                                                            <%= yoklama.yonetici_isim %>
+                                                                <%= yoklama.yonetici_soyisim %>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="3">Henüz devamsızlık kaydı bulunmamaktadır.
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td colspan="3">Henüz yoklama kaydı
+                                                                            bulunmamaktadır.</td>
+                                                                    </tr>
+                                                                    <% } %>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <script>
+                function openMaasModal() {
+                    document.getElementById("maasModal").style.display = "block";
+                }
+
+                function closeMaasModal() {
+                    document.getElementById("maasModal").style.display = "none";
+                }
+
+                function openYoklamaModal() {
+                    document.getElementById("yoklamaModal").style.display = "block";
+                }
+
+                function closeYoklamaModal() {
+                    document.getElementById("yoklamaModal").style.display = "none";
+                }
+
+                window.onclick = function (event) {
+                    if (event.target == document.getElementById("maasModal")) {
+                        closeMaasModal();
+                    }
+                    if (event.target == document.getElementById("yoklamaModal")) {
+                        closeYoklamaModal();
+                    }
+                }
+            </script>
+
+            <style>
+                .yesil {
+                    color: green;
+                    font-weight: bold;
+                }
+
+                .kirmizi {
+                    color: red;
+                    font-weight: bold;
+                }
+            </style>
+
+            <%- include("../parts/footer.ejs") %>

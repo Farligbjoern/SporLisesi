@@ -1,0 +1,154 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content ogrenci_kayit_div">
+                        <div class="card">
+                            <h1>Öğrenci Kayıt Formu</h1>
+                            <p>* ile işaretli alanların doldurulması zorunludur. Lütfen öğrenciye ve veliye sunulan
+                                sözleşmeyi
+                                formu doldurmadan önce imzalatınız.</p>
+                            <br>
+                            <form class="kayit-form" action="/ogrenci/kayit" method="POST">
+                                <div class="form-group-container">
+                                    <div class="form-section">
+                                        <h2>Öğrenci Bilgileri</h2>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="ogrenci_tc">TC Kimlik No *</label>
+                                                <input type="text" id="ogrenci_tc" name="ogrenci_tc" required
+                                                    pattern="[0-9]{11}" maxlength="11" placeholder="12345678901">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="ogrenci_ad">İsim *</label>
+                                                <input type="text" id="ogrenci_ad" name="ogrenci_ad" required
+                                                    placeholder="Öğrenci adı">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ogrenci_soyad">Soyisim *</label>
+                                                <input type="text" id="ogrenci_soyad" name="ogrenci_soyad" required
+                                                    placeholder="Öğrenci soyadı">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="ogrenci_cinsiyet">Cinsiyet *</label>
+                                                <select id="ogrenci_cinsiyet" name="ogrenci_cinsiyet" required>
+                                                    <option value="">Seçiniz</option>
+                                                    <option value="E">Erkek</option>
+                                                    <option value="K">Kadın</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ogrenci_dogum">Doğum Tarihi *</label>
+                                                <input type="date" id="ogrenci_dogum" name="ogrenci_dogum" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="ogrenci_telno">Telefon Numarası *</label>
+                                                <input type="number" id="ogrenci_telno" name="ogrenci_telno" required
+                                                    pattern="[0-9]{10}" maxlength="10" placeholder="5321234567">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ogrenci_mail">Öğrenci Mail Adresi *</label>
+                                                <input type="mail" id="ogrenci_mail" name="ogrenci_mail" required
+                                                    placeholder="Öğrenci mail adresi">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="ogrenci_sakatlik">Sakatlık Dönüş Tarihi</label>
+                                                <input type="date" id="ogrenci_sakatlik" name="ogrenci_sakatlik"
+                                                    value="01-01-2000" required>
+                                                <script>
+                                                    document.getElementById('ogrenci_sakatlik').value = '0001-01-01'; 
+                                                </script>
+                                                <span>Eğer öğrencinin herhangi bir sakatlığı yoksa lütfen oynamayınız.
+                                                    (Değiştirdiyseniz lütfen <a href="javascript:void(0)"
+                                                        onclick="document.getElementById('ogrenci_sakatlik').value = '0001-01-01'">Bana
+                                                        Basınız</a>
+                                                    olarak geri ayarlayınız.)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <h2>Veli Bilgileri</h2>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="veli_tc">Veli TC Kimlik No *</label>
+                                                <input type="text" id="veli_tc" name="veli_tc" required
+                                                    pattern="[0-9]{11}" maxlength="11" placeholder="12345678901">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="veli_ad">Veli Adı *</label>
+                                                <input type="text" id="veli_ad" name="veli_ad" required
+                                                    placeholder="Veli adı">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="veli_soyad">Veli Soyadı *</label>
+                                                <input type="text" id="veli_soyad" name="veli_soyad" required
+                                                    placeholder="Veli soyadı">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="veli_tel">Veli Telefon Numarası*</label>
+                                                <input type="tel" id="veli_tel" name="veli_tel" required
+                                                    pattern="[0-9]{10}" maxlength="10" placeholder="5321234567">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="veli_mail">Veli Mail Adresi *</label>
+                                                <input type="mail" id="veli_mail" name="veli_mail" required
+                                                    placeholder="Veli mail adresi">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <p><span style="color: red;">Not!!</span> Öğrenci kaydı yapıldıktan sonra
+                                            üyeliği
+                                            tamamlanabilmesi için <a href="/login/register_ogrenci"
+                                                target="_blank">/login/register_ogrenci</a> linkine girerek Tc
+                                            kimlik numarası ile giriş yapıp şifresini belirlemelidir. Kurum yöneticisi
+                                            ya da
+                                            personel tarafından da yapılabilir.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                                    <button type="button" id="temizlerrr" class="btn btn-secondary">Temizle (İlk haline
+                                        döndür)</button>
+                                    <script>
+                                        document.getElementById("temizlerrr").addEventListener("click", function () {
+                                            document.getElementById("ogrenci_tc").value = "";
+                                            document.getElementById("ogrenci_ad").value = "";
+                                            document.getElementById("ogrenci_soyad").value = "";
+                                            document.getElementById("ogrenci_cinsiyet").value = "";
+                                            document.getElementById("ogrenci_dogum").value = "";
+                                            document.getElementById("ogrenci_telno").value = "";
+                                            document.getElementById("ogrenci_mail").value = "";
+                                            document.getElementById("ogrenci_sakatlik").value = "0001-01-01";
+                                            document.getElementById("veli_tc").value = "";
+                                            document.getElementById("veli_ad").value = "";
+                                            document.getElementById("veli_soyad").value = "";
+                                            document.getElementById("veli_tel").value = "";
+                                            document.getElementById("veli_mail").value = "";
+                                            document.getElementById("spor_dali").value = "";
+                                        });
+                                    </script>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </section>
+
+            <%- include("../parts/footer.ejs") %>

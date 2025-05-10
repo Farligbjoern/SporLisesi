@@ -1,0 +1,122 @@
+<%- include("../parts/header.ejs") %>
+    <section class="main-container" style="margin-top: -70px;">
+        <%- include("../parts/sidebar.ejs") %>
+            <div class="content">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1><i class="fas fa-bullhorn"></i> Duyurular</h1>
+                            <% if(data.yetki>= 2) { %>
+                                <a href="/duyuru_ekle" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Yeni Duyuru Ekle
+                                </a>
+                                <% } %>
+                        </div>
+                        <div class="duyurular-list">
+                            <% if(duyurular && duyurular.length> 0) { %>
+                                <% duyurular.forEach(function(duyuru) { %>
+                                    <div class="duyuru-item">
+                                        <div class="duyuru-content">
+                                            <p class="duyuru-text">
+                                                <%= duyuru.announcement %>
+                                            </p>
+                                            <div class="duyuru-meta">
+                                                <div class="duyuru-author">
+                                                    <i class="fas fa-user"></i>
+                                                    <%= duyuru.isim %>
+                                                </div>
+                                                <div class="duyuru-date">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <%= new Date(duyuru.date).toLocaleDateString('tr-TR', {
+                                                        day: '2-digit' , month: 'long' , year: 'numeric' ,
+                                                        hour: '2-digit' , minute: '2-digit' }) %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <div class="no-data">
+                                                <p>Henüz duyuru bulunmamaktadır.</p>
+                                            </div>
+                                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <style>
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .duyuru-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .duyuru-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .duyuru-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .duyuru-text {
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .duyuru-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .duyuru-author,
+        .duyuru-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .btn-primary {
+            background: #1976D2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #1565C0;
+        }
+    </style>
+
+    <%- include("../parts/footer.ejs") %>

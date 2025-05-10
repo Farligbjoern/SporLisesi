@@ -1,0 +1,188 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content">
+                        <div class="cards">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h1><i class="fas fa-clock"></i> Seans Düzenle</h1>
+                                </div>
+                                <div class="form-section">
+                                    <form action="/seanslar/duzenle/<%= seans.id %>" method="POST" class="kayit-form">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="seans_adi">Seans Adı *</label>
+                                                <input type="text" id="seans_adi" name="seans_adi" required
+                                                    class="modern-input" value="<%= seans.seans_adi %>"
+                                                    placeholder="Örn: Sabah Fitness">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="spor_dali">Spor Dalı *</label>
+                                                <select id="spor_dali" name="spor_dali" required class="modern-select">
+                                                    <% sporDallari.forEach(function(spor) { %>
+                                                        <option value="<%= spor.id %>" <%=seans.spor_dali_id===spor.id
+                                                            ? 'selected' : '' %>>
+                                                            <%= spor.spor_adi %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="seans_tarihi">Seans Tarihi *</label>
+                                                <input type="date" id="seans_tarihi" name="seans_tarihi" required
+                                                    class="modern-input" value="<%= seans.seans_tarihi %>"
+                                                    min="<%= new Date().toISOString().split('T')[0] %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="baslangic_saati">Başlangıç Saati *</label>
+                                                <input type="time" id="baslangic_saati" name="baslangic_saati" required
+                                                    class="modern-input" value="<%= seans.baslangic_saati %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bitis_saati">Bitiş Saati *</label>
+                                                <input type="time" id="bitis_saati" name="bitis_saati" required
+                                                    class="modern-input" value="<%= seans.bitis_saati %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="kapasite">Kapasite *</label>
+                                                <input type="number" id="kapasite" name="kapasite" required
+                                                    class="modern-input" value="<%= seans.kapasite %>" min="1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tesis">Tesis *</label>
+                                                <select id="tesis" name="tesis" required class="modern-select">
+                                                    <% tesisler.forEach(function(tesis) { %>
+                                                        <option value="<%= tesis.id %>" <%=seans.tesis_id===tesis.id
+                                                            ? 'selected' : '' %>>
+                                                            <%= tesis.tesis_adi %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Personeller *</label>
+                                                <div class="search-box">
+                                                    <input type="text" id="personelSearch"
+                                                        class="modern-input search-input" placeholder="Personel ara...">
+                                                </div>
+                                                <select name="personeller[]" id="personelSelect" multiple required
+                                                    class="modern-select">
+                                                    <% personeller.forEach(function(personel) { %>
+                                                        <option value="<%= personel.id %>"
+                                                            <%=seans.personel_ids.includes(personel.id) ? 'selected'
+                                                            : '' %>>
+                                                            <%= personel.isim %>
+                                                                <%= personel.soyisim %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Öğrenciler</label>
+                                                <div class="search-box">
+                                                    <input type="text" id="ogrenciSearch"
+                                                        class="modern-input search-input" placeholder="Öğrenci ara...">
+                                                </div>
+                                                <select name="ogrenciler[]" id="ogrenciSelect" multiple
+                                                    class="modern-select">
+                                                    <% ogrenciler.forEach(function(ogrenci) { %>
+                                                        <option value="<%= ogrenci.id %>"
+                                                            <%=seans.ogrenci_ids.includes(ogrenci.id) ? 'selected' : ''
+                                                            %>>
+                                                            <%= ogrenci.isim %>
+                                                                <%= ogrenci.soyisim %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <button type="submit" class="modern-submit-button">
+                                                <i class="fas fa-save"></i>
+                                                <span>Seansı Güncelle</span>
+                                            </button>
+                                            <a href="/seanslar" class="modern-button secondary">
+                                                <i class="fas fa-times"></i>
+                                                <span>İptal</span>
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <style>
+                .search-box {
+                    margin-bottom: 8px;
+                }
+
+                .search-input {
+                    width: 100%;
+                    padding: 8px;
+                    margin-bottom: 4px;
+                }
+
+                .modern-select {
+                    min-height: 120px;
+                }
+
+                .form-actions {
+                    margin-top: 20px;
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .modern-button.secondary {
+                    background: linear-gradient(135deg, #757575, #616161);
+                }
+
+                .modern-button.secondary:hover {
+                    background: linear-gradient(135deg, #616161, #424242);
+                }
+            </style>
+
+            <script>
+                // Search functionality for personnel
+                document.getElementById('personelSearch').addEventListener('input', function (e) {
+                    const searchText = e.target.value.toLowerCase();
+                    const options = document.getElementById('personelSelect').options;
+
+                    for (let option of options) {
+                        const text = option.text.toLowerCase();
+                        option.style.display = text.includes(searchText) ? '' : 'none';
+                    }
+                });
+
+                // Search functionality for students
+                document.getElementById('ogrenciSearch').addEventListener('input', function (e) {
+                    const searchText = e.target.value.toLowerCase();
+                    const options = document.getElementById('ogrenciSelect').options;
+
+                    for (let option of options) {
+                        const text = option.text.toLowerCase();
+                        option.style.display = text.includes(searchText) ? '' : 'none';
+                    }
+                });
+            </script>
+
+            <%- include("../parts/footer.ejs") %>

@@ -1,0 +1,54 @@
+<%- include("../parts/header.ejs") %>
+    <% if(error !=="yok" ) { %>
+        <script>
+            showAlert("<%= error %>", "<%= typeof request !== 'undefined' && request.query ? request.query.name : '' %>");
+        </script>
+        <% } %>
+            <section class="main-container" style="margin-top: -70px;">
+                <%- include("../parts/sidebar.ejs") %>
+                    <div class="content">
+                        <div class="cards">
+                            <div class="card">
+                                <h1>Yoklama Geçmişi</h1>
+                                <p>Son 100 yoklama kaydı gösterilmektedir.</p>
+                                <div style="margin-bottom: 20px;">
+                                    <a href="/yoklama" class="btn btn-primary">Yeni Yoklama Al</a>
+                                </div>
+                                <table>
+                                    <tr>
+                                        <th>Öğrenci</th>
+                                        <th>Durum</th>
+                                        <th>Personel</th>
+                                    </tr>
+                                    <% yoklamalar.forEach(function(yoklama) { %>
+                                        <tr>
+                                            <td>
+                                                <%= yoklama.ogrenci_isim %>
+                                                    <%= yoklama.ogrenci_soyisim %>
+                                            </td>
+                                            <td>
+                                                <span class="durum-badge <%= yoklama.durum %>">
+                                                    <%= yoklama.durum.toUpperCase() %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <%= yoklama.personel_isim %>
+                                                    <%= yoklama.personel_soyisim %>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+
+
+            <script>
+                document.querySelectorAll('.buyuk').forEach(element => {
+                    element.innerHTML = element.innerHTML.toUpperCase();
+                });
+            </script>
+
+            <%- include("../parts/footer.ejs") %>

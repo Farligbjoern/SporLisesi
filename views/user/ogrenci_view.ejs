@@ -1,0 +1,363 @@
+<%- include("../parts/header.ejs") %>
+
+
+    <section class="main-container" style="margin-top: -70px;">
+        <%- include("../parts/sidebar.ejs") %>
+            <div class="content ogrenci_kayit_div">
+                <div class="card">
+                    <h1>Öğrenci bilgi formu</h1>
+                    <p>Değişiklik yaparsanız yaptığınız değişiklikleri kaydetmek için kaydet butonuna basınız.</p>
+                    <br>
+                    <form action="/ogrenci/view/<%= ogrenci.id %>" method="POST" class="kayit-form">
+                        <div class="form-group-container">
+                            <div class="form-section">
+                                <h2>Öğrenci bilgileri</h2>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ogrenci_tc">Öğrenci TC</label>
+                                        <input type="text" id="ogrenci_tc" name="ogrenci_tc" value="<%= ogrenciTc %>"
+                                            pattern="[0-9]{11}" maxlength="11" placeholder="12345678901" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ogrenci_isim">Öğrenci İsim</label>
+                                        <input type="text" id="ogrenci_isim" name="ogrenci_isim"
+                                            value="<%= ogrenci.isim %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ogrenci_soyisim">Öğrenci Soyisim</label>
+                                        <input type="text" id="ogrenci_soyisim" name="ogrenci_soyisim"
+                                            value="<%= ogrenci.soyisim %>" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ogrenci_cinsiyet">Öğrenci Cinsiyet</label>
+                                        <select id="ogrenci_cinsiyet" name="ogrenci_cinsiyet" required>
+                                            <option value="E" <% if(ogrenci.cinsiyet=="E" ) { %> selected <% } %>>Erkek
+                                            </option>
+                                            <option value="K" <% if(ogrenci.cinsiyet=="K" ) { %> selected <% } %>>Kadın
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ogrenci_dogum_tarihi">Öğrenci Doğum Tarihi</label>
+                                        <input type="date" id="ogrenci_dogum_tarihi" name="ogrenci_dogum_tarihi"
+                                            value="<%= new Date(ogrenci.dogum_tarihi).toISOString().split('T')[0] %>"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ogrenci_mail">Öğrenci Mail Adresi</label>
+                                        <input type="email" id="ogrenci_mail" name="ogrenci_mail"
+                                            value="<%= ogrenci.mail %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ogrenci_telno">Öğrenci Telefon Numarası</label>
+                                        <input type="tel" id="ogrenci_telno" name="ogrenci_telno"
+                                            value="<%= ogrenci.telno %>" pattern="[0-9]{10}" maxlength="10"
+                                            placeholder="5321234567" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="sakatlik">Sakatlık Dönüş Tarihi</label>
+                                        <input type="date" id="sakatlik" name="sakatlik"
+                                            value="<%= ogrenci.sakatlık_tarihi %>">
+                                    </div>
+                                </div>
+                                <br>
+                                <h2>Aidat && yoklama Bilgileri</h2>
+                                <div class="form-row" style="margin-top: -15px;">
+                                    <div class="form-group">
+                                        <div class="aidat-status">
+                                            <% let lastPayment=aidatlar && aidatlar.length> 0 ? aidatlar[0] : null;
+                                                let today = new Date();
+                                                let lastPaymentDate = lastPayment ? new Date(lastPayment.odenen_tarih) :
+                                                null;
+                                                let daysDiff = lastPaymentDate ? Math.ceil((today - lastPaymentDate) /
+                                                (1000 * 60 * 60 * 24)) : 31;
+                                                %>
+
+                                                <% if (lastPayment && daysDiff <=30) { %>
+                                                    <div class="last-payment">
+                                                        <strong style="color: green;">Bu Ayın Aidatı Ödendi</strong><br>
+                                                        <small>Son Ödeme: <%= lastPayment.odeme_miktari %> TL
+                                                                (<%= new
+                                                                    Date(lastPayment.odenen_tarih).toLocaleDateString('tr-TR')
+                                                                    %>)</small>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div class="last-payment">
+                                                            <strong style="color: red;">Bu Ayın Aidatı
+                                                                Ödenmedi</strong><br><br>
+                                                            <a href="/ogrenci/pay" class="btn btn-primary btn-sm">Aidat
+                                                                Ödemesi Yap</a>
+                                                        </div>
+                                                        <% } %>
+
+                                                            <% if (aidatlar && aidatlar.length> 0) { %>
+                                                                <button type="button" class="btn btn-info btn-sm"
+                                                                    onclick="openAidatModal()">
+                                                                    Aidat Geçmişini Görüntüle (<%= aidatlar.length %>
+                                                                        ödeme)
+                                                                </button>
+                                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Yoklama Durumu</label>
+                                        <div class="yoklama-status">
+                                            <button type="button" class="btn btn-info btn-sm"
+                                                onclick="openYoklamaModal()">
+                                                Yoklama Geçmişini Görüntüle
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h2>Veli bilgileri</h2>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="veli_tc">Veli TC</label>
+                                        <input type="text" id="veli_tc" name="veli_tc" value="<%= ogrenci.veli_tc %>"
+                                            pattern="[0-9]{11}" maxlength="11" placeholder="12345678901" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="veli_isim">Veli İsim</label>
+                                        <input type="text" id="veli_isim" name="veli_isim"
+                                            value="<%= ogrenci.veli_isim %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="veli_soyisim">Veli Soyisim</label>
+                                        <input type="text" id="veli_soyisim" name="veli_soyisim"
+                                            value="<%= ogrenci.veli_soyisim %>" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="veli_mail">Veli Mail Adresi</label>
+                                        <input type="email" id="veli_mail" name="veli_mail"
+                                            value="<%= ogrenci.veli_mail %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="veli_telno">Veli Telefon Numarası</label>
+                                        <input type="tel" id="veli_telno" name="veli_telno"
+                                            value="<%= ogrenci.veli_telno %>" pattern="[0-9]{10}" maxlength="10"
+                                            placeholder="5321234567" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                                <button type="button" id="temizlerrr" class="btn btn-secondary"></button>
+                                Temizle (İlk haline döndür)
+                                </button>
+                                <script>
+                                    document.getElementById("temizlerrr").addEventListener("click", function () {
+                                        document.getElementById("ogrenci_tc").value = "<%= ogrenciTc %>";
+                                        document.getElementById("ogrenci_isim").value = "<%= ogrenci.isim %>";
+                                        document.getElementById("ogrenci_soyisim").value = "<%= ogrenci.soyisim %>";
+                                        document.getElementById("ogrenci_cinsiyet").value = "<%= ogrenci.cinsiyet %>";
+                                        document.getElementById("ogrenci_dogum_tarihi").value = "<%= new Date(ogrenci.dogum_tarihi).toISOString().split('T')[0] %>";
+                                        document.getElementById("ogrenci_telno").value = "<%= ogrenci.telno %>";
+                                        document.getElementById("ogrenci_mail").value = "<%= ogrenci.mail %>";
+                                        const sakatlikDate = "<%= ogrenci.sakatlık_tarihi %>";
+                                        document.getElementById("sakatlik").value = "<%= new Date(ogrenci.sakatlık_tarihi).toISOString().split('T')[0] %>";
+                                        document.getElementById("veli_tc").value = "<%= ogrenci.veli_tc %>";
+                                        document.getElementById("veli_isim").value = "<%= ogrenci.veli_isim %>";
+                                        document.getElementById("veli_soyisim").value = "<%= ogrenci.veli_soyisim %>";
+                                        document.getElementById("veli_mail").value = "<%= ogrenci.veli_mail %>";
+                                        document.getElementById("veli_telno").value = "<%= ogrenci.veli_telno %>";
+                                    });
+
+                                    function openAidatModal() {
+                                        document.getElementById("aidatModal").style.display = "block";
+                                    }
+
+                                    function closeAidatModal() {
+                                        document.getElementById("aidatModal").style.display = "none";
+                                    }
+
+                                    function openYoklamaModal() {
+                                        document.getElementById("yoklamaModal").style.display = "block";
+                                    }
+
+                                    function closeYoklamaModal() {
+                                        document.getElementById("yoklamaModal").style.display = "none";
+                                    }
+
+                                    window.onclick = function (event) {
+                                        if (event.target == document.getElementById("maasModal")) {
+                                            closeMaasModal();
+                                        }
+                                        if (event.target == document.getElementById("aidatModal")) {
+                                            closeAidatModal();
+                                        }
+                                        if (event.target == document.getElementById("yoklamaModal")) {
+                                            closeYoklamaModal();
+                                        }
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                </div>
+                </form>
+            </div>
+            </div>
+    </section>
+    v
+    <script>
+        function openAidatModal() {
+            document.getElementById("aidatModal").style.display = "block";
+        }
+
+        function closeAidatModal() {
+            document.getElementById("aidatModal").style.display = "none";
+        }
+
+        function openYoklamaModal() {
+            document.getElementById("yoklamaModal").style.display = "block";
+        }
+
+        function closeYoklamaModal() {
+            document.getElementById("yoklamaModal").style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById("aidatModal")) {
+                closeAidatModal();
+            }
+            if (event.target == document.getElementById("yoklamaModal")) {
+                closeYoklamaModal();
+            }
+        }
+    </script>
+
+    <div id="aidatModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Aidat Geçmişi - <%= ogrenci.isim %>
+                        <%= ogrenci.soyisim %>
+                </h2>
+                <span class="close" onclick="closeAidatModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="cards">
+                    <div class="card">
+                        <% if(aidatlar && aidatlar.length> 0) { %>
+                            <table>
+                                <tr>
+                                    <th>Ödeme Tarihi</th>
+                                    <th>Miktar</th>
+                                    <th>Ödeme Şekli</th>
+                                    <th>Açıklama</th>
+                                    <th>Ödeyen</th>
+                                </tr>
+                                <% aidatlar.forEach(function(odeme) { %>
+                                    <tr>
+                                        <td>
+                                            <%= new Date(odeme.odenen_tarih).toLocaleDateString('tr-TR') %>
+                                        </td>
+                                        <td>
+                                            <%= odeme.odeme_miktari %> TL
+                                        </td>
+                                        <td class="buyuk">
+                                            <%= odeme.odeme_sekli %>
+                                        </td>
+                                        <td>
+                                            <%= odeme.odeme_aciklama %>
+                                        </td>
+                                        <td>
+                                            <%= odeme.odeyen_isim %>
+                                                <%= odeme.odeyen_soyisim %>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </table>
+                            <% } else { %>
+                                <p>Henüz aidat ödemesi yapılmamış.</p>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Yoklama Geçmişi Modal -->
+    <div id="yoklamaModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Yoklama Geçmişi - <%= ogrenci.isim %>
+                        <%= ogrenci.soyisim %>
+                </h2>
+                <span class="close" onclick="closeYoklamaModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="cards">
+                    <div class="card">
+                        <table>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Durum</th>
+                                <th>Yoklamayı Alan</th>
+                            </tr>
+                            <% if (typeof yoklamalar !=='undefined' && yoklamalar.length> 0) { %>
+                                <% const filteredYoklamalar=yoklamalar.filter(yoklama=> yoklama.durum !== 'geldi'); %>
+                                    <% if (filteredYoklamalar.length> 0) { %>
+                                        <% filteredYoklamalar.forEach(function(yoklama) { %>
+                                            <tr>
+                                                <td>
+                                                    <%= new Date(yoklama.tarih).toLocaleDateString('tr-TR') %>
+                                                </td>
+                                                <td class="buyuk <%= yoklama.durum === 'gelmedi' ? 'kirmizi' : '' %>">
+                                                    <%= yoklama.durum %>
+                                                </td>
+                                                <td>
+                                                    <%= yoklama.personel_isim %>
+                                                        <%= yoklama.personel_soyisim %>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="3">Henüz devamsızlık kaydı bulunmamaktadır.</td>
+                                                    </tr>
+                                                    <% } %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="3">Henüz yoklama kaydı bulunmamaktadır.
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .yesil {
+            color: green;
+            font-weight: bold;
+        }
+
+        .kirmizi {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+
+    <%- include("../parts/footer.ejs") %>

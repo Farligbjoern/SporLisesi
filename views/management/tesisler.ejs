@@ -1,0 +1,287 @@
+<%- include("../parts/header.ejs") %>
+
+    <section class="main-container" style="margin-top: -70px;">
+        <%- include("../parts/sidebar.ejs") %>
+            <div class="content">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1><i class="fas fa-building"></i> Tesisler Yönetimi</h1>
+                        </div>
+                        <div class="form-section">
+                            <form action="/tesisler/ekle" method="POST" class="kayit-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="tesis_adi">Tesis Adı *</label>
+                                        <input type="text" id="tesis_adi" name="tesis_adi" required class="modern-input"
+                                            placeholder="Örn: Kapalı Spor Salonu">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tesis_tipi">Tesis Tipi *</label>
+                                        <select id="tesis_tipi" name="tesis_tipi" required class="modern-select">
+                                            <option value="spor_salonu">Spor Salonu</option>
+                                            <option value="stadyum">Stadyum</option>
+                                            <option value="yuzme_havuzu">Yüzme Havuzu</option>
+                                            <option value="fitness_merkezi">Fitness Merkezi</option>
+                                            <option value="diger">Diğer</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kapasite">Kapasite</label>
+                                        <input type="number" id="kapasite" name="kapasite" class="modern-input"
+                                            placeholder="Örn: 100">
+                                    </div>
+                                    <div class="form-group" style="align-self: flex-end;">
+                                        <label class="modern-checkbox">
+                                            <input type="checkbox" id="aktif" name="aktif" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="label-text">Aktif</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-buttons">
+                                    <button type="submit" class="modern-button primary">
+                                        <i class="fas fa-plus"></i> Yeni Tesis Ekle
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Tesisler Listesi</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tesis Adı</th>
+                                        <th>Tesis Tipi</th>
+                                        <th>Kapasite</th>
+                                        <th>Durum</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(tesisler && tesisler.length> 0) { %>
+                                        <% tesisler.forEach(function(tesis) { %>
+                                            <tr>
+                                                <td>
+                                                    <%= tesis.tesis_adi %>
+                                                </td>
+                                                <td class="buyuk">
+                                                    <%= tesis.tesis_tipi %>
+                                                </td>
+                                                <td>
+                                                    <%= tesis.kapasite %> kişi
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        class="status-badge <%= tesis.aktif ? 'active' : 'inactive' %>">
+                                                        <%= tesis.aktif ? 'Aktif' : 'Pasif' %>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <form action="/tesisler/guncelle/<%= tesis.id %>" method="POST">
+                                                        <input type="checkbox" name="aktif" <%=tesis.aktif ? 'checked'
+                                                            : '' %>
+                                                        onchange="this.form.submit()" style="display: none;">
+                                                        <button type="submit"
+                                                            class="modern-button <%= tesis.aktif ? 'danger' : 'success' %> small">
+                                                            Kaldır
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="5" class="no-data">Henüz tesis eklenmemiş.</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <style>
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .card-header h1,
+        .card-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .modern-input,
+        .modern-select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .modern-input:focus,
+        .modern-select:focus {
+            border-color: #1976D2;
+            outline: none;
+        }
+
+        .modern-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .modern-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            margin-right: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .modern-checkbox input:checked+.checkmark {
+            background-color: #1976D2;
+            border-color: #1976D2;
+        }
+
+        .modern-checkbox input:checked+.checkmark:after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .modern-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modern-button.primary {
+            background-color: #1976D2;
+            color: white;
+        }
+
+        .modern-button.success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .modern-button.danger {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .modern-button.small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .modern-button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .modern-table th {
+            background-color: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .modern-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.active {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-badge.inactive {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #666;
+            padding: 20px !important;
+        }
+
+        .form-section {
+            padding: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+    </style>
+
+    <script>
+        document.querySelectorAll('.buyuk').forEach(element => {
+            element.innerHTML = element.innerHTML.toUpperCase();
+        });
+    </script>
+
+    <%- include("../parts/footer.ejs") %>

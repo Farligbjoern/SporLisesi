@@ -1,0 +1,50 @@
+<%- include("../parts/header.ejs") %>
+    <% ("../parts/sidebar.ejs") %>
+        </section>
+        <section class="main-container" style="margin-top: -70px;"> <%- include("../parts/sidebar.ejs") %>
+                <div class="content">
+                    <div class="cards">
+                        <div class="card">
+                            <h1>Tüm <span style="color: #1976D2;">Öğrenciler</span></h1>
+                            <table>
+                                <tr>
+                                    <th>Üye Adı</th>
+                                    <th>Üye Soyadı</th>
+                                    <th>Veli Adı Soyadı</th>
+                                    <th>Sakatlık Durumu</th>
+                                    <th>İşlem</th>
+                                </tr>
+                                <% ogrenciler.forEach(ogrenci=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= ogrenci.isim %>
+                                        </td>
+                                        <td>
+                                            <%= ogrenci.soyisim %>
+                                        </td>
+                                        <td>
+                                            <%= ogrenci.veli_isim %>
+                                                <%= ogrenci.veli_soyisim %>
+                                        </td>
+                                        <td>
+                                            <span class="sakatlik-durumu"
+                                                data-tarih="<%= ogrenci.sakatlık_tarihi %>"></span>
+                                        </td>
+                                        <td><a href="/ogrenci/view/<%= ogrenci.id %>" class="btn">Üyeye git</a></td>
+                                    </tr>
+                                    <% }); %>
+                            </table>
+                            <br>
+                            <a href="/ogrenci/kayit" class="btn" style="background-color: lightgreen;">Yeni Üye
+                                Kaydı</a>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <script>
+            document.querySelectorAll('.buyuk').forEach(element => {
+                element.innerHTML = element.innerHTML.toUpperCase();
+            });
+        </script>
+        <%- include("../parts/footer.ejs") %>
