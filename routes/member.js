@@ -111,7 +111,6 @@ router.post('/ogrenci/kayit', [isAuthenticated, checkPermissionLevel(2)], async 
             veli_mail
         } = req.body;
 
-        // Form validasyonu
         const gerekli_form = {
             'ogrenci_tc': 'Öğrenci TC',
             'ogrenci_ad': 'Öğrenci Adı',
@@ -127,7 +126,6 @@ router.post('/ogrenci/kayit', [isAuthenticated, checkPermissionLevel(2)], async 
             'veli_mail': 'Veli E-posta'
         };
 
-        // Boş alan kontrolü
         const gerekli_form2 = Object.keys(gerekli_form).find(field => !req.body[field]);
         if (gerekli_form2) {
             const result00 = await query("SELECT * FROM personel WHERE up_id=?", [req.session.user]);
@@ -138,7 +136,6 @@ router.post('/ogrenci/kayit', [isAuthenticated, checkPermissionLevel(2)], async 
             });
         }
 
-        // TC kontrolü
         const existingUser = await query("SELECT * FROM users WHERE tc=?", [ogrenci_tc]);
         if (existingUser.length > 0) {
             const result00 = await query("SELECT * FROM personel WHERE up_id=?", [req.session.user]);
@@ -149,11 +146,9 @@ router.post('/ogrenci/kayit', [isAuthenticated, checkPermissionLevel(2)], async 
             });
         }
 
-        // Transaction başlat
         await query('START TRANSACTION');
 
         try {
-            // Önce users tablosuna ekle
             const userResult = await query(
                 "INSERT INTO users (tc) VALUES (?)",
                 [ogrenci_tc]
@@ -163,7 +158,6 @@ router.post('/ogrenci/kayit', [isAuthenticated, checkPermissionLevel(2)], async 
                 throw new Error("Kullanıcı kaydı oluşturulamadı");
             }
 
-            // Sonra öğrenci tablosuna ekle
             const ogrenciResult = await query(
                 `INSERT INTO ogrenci (
                     up_id, ogrenci_tc, isim, soyisim, cinsiyet, dogum_tarihi, 
@@ -188,12 +182,10 @@ router.post('/ogrenci/kayit', [isAuthenticated, checkPermissionLevel(2)], async 
                 ]
             );
 
-            // İşlem başarılı, commit
             await query('COMMIT');
             res.redirect('/ogrenci/all');
 
         } catch (error) {
-            // Hata durumunda rollback
             await query('ROLLBACK');
             const result00 = await query("SELECT * FROM personel WHERE up_id=?", [req.session.user]);
             res.render('user/ogrenci_kayit', {
@@ -368,7 +360,6 @@ router.post('/personel/kayit', [isAuthenticated, checkPermissionLevel(2)], async
             });
         }
 
-        // TC kontrolü
         const existingUser = await query("SELECT * FROM users WHERE tc=?", [tc]);
         if (existingUser.length > 0) {
             const result00 = await query("SELECT * FROM personel WHERE up_id=?", [req.session.user]);
@@ -379,11 +370,9 @@ router.post('/personel/kayit', [isAuthenticated, checkPermissionLevel(2)], async
             });
         }
 
-        // Transaction başlat
         await query('START TRANSACTION');
 
         try {
-            // Önce users tablosuna ekle
             const userResult = await query(
                 "INSERT INTO users (tc) VALUES (?)",
                 [tc]
@@ -393,7 +382,6 @@ router.post('/personel/kayit', [isAuthenticated, checkPermissionLevel(2)], async
                 throw new Error("Kullanıcı kaydı oluşturulamadı");
             }
 
-            // Sonra personel tablosuna ekle
             const personelResult = await query(
                 `INSERT INTO personel (
                     up_id, yetki, isim, soyisim, cinsiyet, telno, mail, 
